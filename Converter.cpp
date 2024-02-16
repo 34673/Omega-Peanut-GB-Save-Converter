@@ -13,23 +13,23 @@ int main(int argc,char** argv){
 	static char outputBuffer[MAX_RAMSIZE] = {0};
 	int (*LZ4)(const char*,char*,int,int) = NULL;
 	if(argc < 2){
-		return Error("[Error] No parameter supplied.");
+		return Error("No parameter supplied.");
 	}
 	auto path = (string)argv[1];
 	auto extension = path.substr(path.find_last_of('.'));
 	if(extension.compare(".gbs") == 0){LZ4 = LZ4_decompress_safe;}
 	if(extension.compare(".sav") == 0){LZ4 = LZ4_compress_default;}
 	if(!LZ4){
-		return Error("[Error] Couldn't identify input file format. Expected '.gbs' or '.sav'.");
+		return Error("Couldn't identify input file format. Expected '.gbs' or '.sav'.");
 	}
 	auto inputFile = fstream(path,ios::in|ios::binary);
 	if(!inputFile){
-		return Error("[Error] Couldn't find file '"+path+"'.");
+		return Error("Couldn't find file '"+path+"'.");
 	}
 	auto length = (int)filesystem::file_size(path);
 	cout << length << endl;
 	if(length < 1){
-		return Error("[Error] Input file is empty.");
+		return Error("Input file is empty.");
 	}
 	auto compressing = LZ4 == LZ4_compress_default;
 	path = path.replace(path.find(extension),extension.length(),compressing ? ".gbs" : ".sav");
